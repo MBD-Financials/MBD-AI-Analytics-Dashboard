@@ -101,7 +101,7 @@ const Dashboard = () => {
 
 				<StatBox
 					title="Last Day Volume"
-					value={{}}
+					// value={{}}
 					increase="+21%"
 					description="Since last month"
 					icon={
@@ -113,7 +113,7 @@ const Dashboard = () => {
 
 				<StatBox
 					title="7 Days Volume"
-					value={{}}
+					// value={{}}
 					increase="+5%"
 					description="Since last month"
 					icon={
@@ -124,7 +124,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="30 Days Volume"
-					value={{}}
+					// value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -135,7 +135,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Volume"
-					value={{}}
+					// value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -146,7 +146,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Collections"
-					value={{}}
+					// value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -157,7 +157,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Transactions"
-					value={{}}
+					// value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -168,7 +168,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Unique Wallets"
-					value={{}}
+					// value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
