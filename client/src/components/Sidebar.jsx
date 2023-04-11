@@ -16,18 +16,18 @@ import {
   SettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
-  HomeOutlined,
-  ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined,
+  HomeOutlined
+  
 } from "@mui/icons-material";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import InsightsIcon from '@mui/icons-material/Insights';
+import ImageIcon from '@mui/icons-material/Image';
+import WalletIcon from '@mui/icons-material/Wallet';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import GetAppIcon from '@mui/icons-material/GetApp';
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
@@ -39,56 +39,96 @@ const navItems = [
     icon: <HomeOutlined />,
   },
   {
-    text: "Client Facing",
+    text: "BLOCKCHAIN" ,
     icon: null,
   },
   {
-    text: "Products",
-    icon: <ShoppingCartOutlined />,
+    text: "Overview Blockchain",
+    icon: <RemoveRedEyeIcon />,
   },
   {
-    text: "Customers",
-    icon: <Groups2Outlined />,
+    text: "Top Collectios",
+    icon: <EqualizerIcon />,
   },
   {
-    text: "Transactions",
-    icon: <ReceiptLongOutlined />,
+    text: "Collection by created date",
+    icon: <InsightsIcon />,
   },
   {
-    text: "Geography",
-    icon: <PublicOutlined />,
+    text: "Hot Contracts",
+    icon: <AutoAwesomeIcon />,
   },
   {
-    text: "Sales",
+    text: "Wallet trends",
+    icon: <AccountBalanceWalletIcon />,
+  },
+  {
+    text: "Volume trends",
+    icon: <InsightsIcon />,
+  },
+  {
+    text: "Minting",
+    icon: <GetAppIcon />,
+  },
+  {
+    text: "Volume by sale type",
+    icon: <InsightsIcon />,
+  },
+  {
+    text: "COLLECTIONS",
     icon: null,
   },
   {
-    text: "Overview",
-    icon: <PointOfSaleOutlined />,
+    text: "Overview Collections",
+    icon: <RemoveRedEyeIcon />,
   },
   {
-    text: "Daily",
-    icon: <TodayOutlined />,
+    text: "Collection Volume",
+    icon: <InsightsIcon />,
   },
   {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
+    text: "Collection event pattern",
+    icon: <CollectionsIcon />,
   },
   {
-    text: "Breakdown",
-    icon: <PieChartOutlined />,
+    text: "Top NFT's",
+    icon: <EqualizerIcon />,
   },
   {
-    text: "Management",
+    text: "Sale type volume",
+    icon: <InsightsIcon />,
+  },
+  {
+    text: "NFT",
+    icon: <ImageIcon />,
+  },
+  {
+    text: "NFT Tracker (Volume)",
+    icon: <InsightsIcon />,
+  },
+  {
+    text: "MARKETPLACE",
     icon: null,
   },
   {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
+    text: "Overview Marketplace",
+    icon: <RemoveRedEyeIcon />,
   },
   {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
+    text: "Marketplace Volume",
+    icon: <InsightsIcon />,
+  },
+  {
+    text: "WALLET",
+    icon: null,
+  },
+  {
+    text: "Overview Wallets",
+    icon: <RemoveRedEyeIcon />,
+  },
+  {
+    text: "Wallet Specific",
+    icon: <WalletIcon />,
   },
 ];
 
@@ -151,8 +191,8 @@ const Sidebar = ({
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
-
+                const lcText = text.toLowerCase().split(' ').join('-');
+               
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton

@@ -7,6 +7,7 @@ import globalReducer from "state";
 import { Provider } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { api } from "state/api";
+import {APIProvider} from "./Context/APIProvider";
 
 const store = configureStore({
   reducer: {
@@ -20,8 +21,10 @@ setupListeners(store.dispatch);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <APIProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </APIProvider>
   </React.StrictMode>
 );
