@@ -18,13 +18,13 @@ import {
 // import { DataGrid } from "@mui/x-data-grid";
 // import BreakdownChart from "components/BreakdownChart";
 import OverviewChart from "components/OverviewChart";
-import { useGetDashboardQuery } from "state/api";
+// import { useGetDashboardQuery } from "state/api";
 import StatBox from "components/StatBox";
 import { useGlobalContext } from "../../Context/APIProvider";
 const Dashboard = () => {
 	const theme = useTheme();
 	const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-	const { data, isLoading } = useGetDashboardQuery();
+	
 
 	const { lastDayVolume } = useGlobalContext();
 
@@ -101,7 +101,7 @@ const Dashboard = () => {
 
 				<StatBox
 					title="Last Day Volume"
-					value={data && data.todayStats.totalSales}
+					value={{}}
 					increase="+21%"
 					description="Since last month"
 					icon={
@@ -113,7 +113,7 @@ const Dashboard = () => {
 
 				<StatBox
 					title="7 Days Volume"
-					value={data && data.thisMonthStats.totalSales}
+					value={{}}
 					increase="+5%"
 					description="Since last month"
 					icon={
@@ -124,7 +124,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="30 Days Volume"
-					value={data && data.yearlySalesTotal}
+					value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -135,7 +135,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Volume"
-					value={data && data.yearlySalesTotal}
+					value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -146,7 +146,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Collections"
-					value={data && data.yearlySalesTotal}
+					value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -157,7 +157,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Transactions"
-					value={data && data.yearlySalesTotal}
+					value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
@@ -168,7 +168,7 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Unique Wallets"
-					value={data && data.yearlySalesTotal}
+					value={{}}
 					increase="+43%"
 					description="Since last month"
 					icon={
