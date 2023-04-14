@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
 import {
@@ -24,13 +24,76 @@ import { useGlobalContext } from "../../Context/APIProvider";
 const Dashboard = () => {
 	const theme = useTheme();
 	const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+	const { volumeOfNfts } = useGlobalContext();
+
+	const [oneDayVolume, setOneDayVolume] = useState("");
+	const [oneDayVolumeChange, setOneDayVolumeChange] = useState("")
+
+	const [sevenDayVolumeChange, setSevenDayVolumeChange] = useState("")
+	const [sevenDayVolume, setSevenDayVolume] = useState("")
+
+	const [thirtyDayVolumeChange, setThirtyDayVolumeChange] = useState("")
+	const [thirtyDayVolume, setThirtyDayVolume] = useState("")
+
+	const [allTimeVolumeChange, setAllTimeVolumeChange] = useState("")
+	const [allTimeVolumeNFTs, setAllTimeVolumeNFTs] = useState("")
+
+
+	const volumeLastDay = async()=>{
+
+		await volumeOfNfts((response)=>{
+			const volume = (Number(response?.metric_values.volume.value) / 1.0e+6).toFixed(2) + " M"
+			const volumeChange = (Number(response?.metric_values.volume_change.value)).toFixed(2) +"%"
+			setOneDayVolume(volume)
+			setOneDayVolumeChange(volumeChange)
+		},'24h')
+		
+	}
+	const volumeSevenDays = async()=>{
+
+		await volumeOfNfts((response)=>{
+			const volume = (Number(response?.metric_values.volume.value) / 1.0e+6).toFixed(2) + " M"
+			const volumeChange = (Number(response?.metric_values.volume_change.value)).toFixed(2) +"%"
+			setSevenDayVolume(volume)
+			setSevenDayVolumeChange(volumeChange)
+		},'7d')
+		
+	}
+
+	const volumeThirtyDays = async()=>{
+
+		await volumeOfNfts((response)=>{
+			const volume = (Number(response?.metric_values.volume.value) / 1.0e+9).toFixed(2) + " B"
+			const volumeChange = (Number(response?.metric_values.volume_change.value)).toFixed(2) +"%"
+			setThirtyDayVolume(volume)
+			setThirtyDayVolumeChange(volumeChange)
+		},'30d')
+		
+	}
+	const allTimeVolume = async()=>{
+
+		await volumeOfNfts((response)=>{
+			console.log(response)
+			const volume = (Number(response?.metric_values.volume.value) / 1.0e+9).toFixed(2) + " B"
+			const volumeChange = (Number(response?.metric_values.volume_change.value)).toFixed(2) +"%"
+			setAllTimeVolumeNFTs(volume)
+			setAllTimeVolumeChange(volumeChange)
+		},'all')
+		
+	}
 	
 
-	const { lastDayVolume } = useGlobalContext();
 
-	useEffect(() => {
-		lastDayVolume();
-	});
+
+ 	useEffect(() => {
+		volumeLastDay();
+		volumeSevenDays();
+		volumeThirtyDays();
+		allTimeVolume();	
+	},[])
+		
+		// setOneDayVolume(lastDayVolume());
+		// console.log(lastDayVolume.data);
 
 	// const columns = [
 	//   {
@@ -101,8 +164,8 @@ const Dashboard = () => {
 
 				<StatBox
 					title="Last Day Volume"
-					// value={{}}
-					increase="+21%"
+					value={oneDayVolume}
+					increase={oneDayVolumeChange}
 					description="Since last month"
 					icon={
 						<PointOfSale
@@ -113,8 +176,8 @@ const Dashboard = () => {
 
 				<StatBox
 					title="7 Days Volume"
-					// value={{}}
-					increase="+5%"
+					value={sevenDayVolume}
+					increase={sevenDayVolumeChange}
 					description="Since last month"
 					icon={
 						<PersonAdd
@@ -124,8 +187,8 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="30 Days Volume"
-					// value={{}}
-					increase="+43%"
+					value={thirtyDayVolume}
+					increase={thirtyDayVolumeChange}
 					description="Since last month"
 					icon={
 						<Traffic
@@ -135,8 +198,8 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Volume"
-					// value={{}}
-					increase="+43%"
+					value={allTimeVolumeNFTs}
+					increase={allTimeVolumeChange}
 					description="Since last month"
 					icon={
 						<Traffic

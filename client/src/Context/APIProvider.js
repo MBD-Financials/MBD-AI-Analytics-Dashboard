@@ -4,31 +4,39 @@ import axios from "axios";
 const API_KEY = process.env.REACT_APP_API_KEY;
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-
 export const APIContext = React.createContext();
 
 export const APIProvider = ({ children }) => {
-	const lastDayVolume = async () => {
+
+	const volumeOfNfts = async (callBack,time) => {
 		try {
 			await axios
 				.get(
 					API_BASE_URL +
-						"market/metrics?currency=usd&metrics=volume&metrics=volume_change&time_range=24h&include_washtrade=true",
-					{headers:{'x-api-key': API_KEY}}
+						`market/metrics?currency=usd&metrics=volume&metrics=volume_change&time_range=${time}&include_washtrade=true`,
+					{ headers: { accept: "application/json", "x-api-key": API_KEY } }
 				)
 				.then((response) => {
-					console.log(response);
+					if (response.status === 200){
+						callBack(response.data)
+					}
+					
+					
 				})
 				.catch((error) => {
-					console.log(error);
+					console.log(error)
+					
 				});
 		} catch (error) {
 			console.log(error);
+			
 		}
 	};
 
+
+
 	return (
-		<APIContext.Provider value={{ lastDayVolume }}>
+		<APIContext.Provider value={{ volumeOfNfts}}>
 			{children}
 		</APIContext.Provider>
 	);
