@@ -24,7 +24,7 @@ import { useGlobalContext } from "../../Context/APIProvider";
 const Dashboard = () => {
 	const theme = useTheme();
 	const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-	const { volumeOfNfts } = useGlobalContext();
+	const { volumeOfNfts, totalCollections, totalWallets } = useGlobalContext();
 
 	const [oneDayVolume, setOneDayVolume] = useState("");
 	const [oneDayVolumeChange, setOneDayVolumeChange] = useState("")
@@ -37,6 +37,10 @@ const Dashboard = () => {
 
 	const [allTimeVolumeChange, setAllTimeVolumeChange] = useState("")
 	const [allTimeVolumeNFTs, setAllTimeVolumeNFTs] = useState("")
+
+	const [totalCollectionCount, setTotalCollectionCount] = useState("")
+
+	const [allWallets, setAllWallets] = useState("")
 
 
 	const volumeLastDay = async()=>{
@@ -73,7 +77,6 @@ const Dashboard = () => {
 	const allTimeVolume = async()=>{
 
 		await volumeOfNfts((response)=>{
-			console.log(response)
 			const volume = (Number(response?.metric_values.volume.value) / 1.0e+9).toFixed(2) + " B"
 			const volumeChange = (Number(response?.metric_values.volume_change.value)).toFixed(2) +"%"
 			setAllTimeVolumeNFTs(volume)
@@ -82,6 +85,19 @@ const Dashboard = () => {
 		
 	}
 	
+	const allCollection = async() =>{
+		await totalCollections((response)=>{
+			const totalCount = (Number(response?.pagination.total_items) / 1.0e+3).toFixed(2) + " K"
+			setTotalCollectionCount(totalCount)
+		})
+	}
+
+	const allTimeWalletsCount = async () =>{
+		await totalWallets ((response)=>{
+			const totalCount = (Number(response?.pagination.total_items) / 1.0e+6).toFixed(2) + " M"
+			setAllWallets(totalCount)
+		})
+	}
 
 
 
@@ -90,41 +106,10 @@ const Dashboard = () => {
 		volumeSevenDays();
 		volumeThirtyDays();
 		allTimeVolume();	
+		allCollection();
+		allTimeWalletsCount();
 	},[])
-		
-		// setOneDayVolume(lastDayVolume());
-		// console.log(lastDayVolume.data);
 
-	// const columns = [
-	//   {
-	//     field: "_id",
-	//     headerName: "ID",
-	//     flex: 1,
-	//   },
-	//   {
-	//     field: "userId",
-	//     headerName: "User ID",
-	//     flex: 1,
-	//   },
-	//   {
-	//     field: "createdAt",
-	//     headerName: "CreatedAt",
-	//     flex: 1,
-	//   },
-	//   {
-	//     field: "products",
-	//     headerName: "# of Products",
-	//     flex: 0.5,
-	//     sortable: false,
-	//     renderCell: (params) => params.value.length,
-	//   },
-	//   {
-	//     field: "cost",
-	//     headerName: "Cost",
-	//     flex: 1,
-	//     renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
-	//   },
-	// ];
 
 	return (
 		<Box m="1.5rem 2.5rem">
@@ -134,7 +119,7 @@ const Dashboard = () => {
 					subtitle="Welcome to your NFT Dashboard"
 				/>
 
-				<Box>
+				{/* <Box>
 					<Button
 						sx={{
 							backgroundColor: theme.palette.secondary.light,
@@ -147,7 +132,7 @@ const Dashboard = () => {
 						<DownloadOutlined sx={{ mr: "10px" }} />
 						Download Reports
 					</Button>
-				</Box>
+				</Box> */}
 			</FlexBetween>
 
 			<Box
@@ -209,31 +194,18 @@ const Dashboard = () => {
 				/>
 				<StatBox
 					title="Total Collections"
-					// value={{}}
-					increase="+43%"
-					description="Since last month"
+					value={totalCollectionCount}
+					increase=""
 					icon={
 						<Traffic
 							sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
 						/>
 					}
 				/>
-				<StatBox
-					title="Total Transactions"
-					// value={{}}
-					increase="+43%"
-					description="Since last month"
-					icon={
-						<Traffic
-							sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-						/>
-					}
-				/>
+				
 				<StatBox
 					title="Total Unique Wallets"
-					// value={{}}
-					increase="+43%"
-					description="Since last month"
+					value={allWallets}
 					icon={
 						<Traffic
 							sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -248,7 +220,7 @@ const Dashboard = () => {
 					p="1rem"
 					borderRadius="0.55rem"
 				>
-					<h2>Top 100 Collections by Volume (USD)</h2>
+					<h2>One Month Volume (USD)</h2>
 					<OverviewChart view="sales" isDashboard={true} />
 				</Box>
 
