@@ -32,6 +32,8 @@ export const APIProvider = ({ children }) => {
 			
 		}
 	};
+
+	// collections?currency=usd&blockchain=1&metrics=volume&sort_by=volume&sort_order=desc&offset=0&limit=100&time_range=all&include_washtrade=true
 	const totalCollections = async (callBack) => {
 		try {
 			await axios

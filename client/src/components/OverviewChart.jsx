@@ -17,7 +17,6 @@ const OverviewChart = ({ isDashboard = false, view }) => {
 		});
 	}, []);
 
-  console.log(monthData);
   
 	const [monthDataChart] = useMemo(()=>{
 	  if (monthData?.length === 0) return [];
@@ -29,19 +28,19 @@ const OverviewChart = ({ isDashboard = false, view }) => {
       	};
     
     monthData?.data_points?.map((item,id)=>{
-    console.log();
+
     monthDataChart.data = [
         ...monthDataChart.data,
         {x:new Date(Date.parse(item.date)).toLocaleDateString(), y: item.values.volume}
       ]
     });
     
-
+	console.log([monthDataChart]);
     return [[monthDataChart]]
 
 
 	});
-  console.log(monthDataChart);
+  
 
 	if (monthData.length === 0 || isLoading) return "Loading...";
 

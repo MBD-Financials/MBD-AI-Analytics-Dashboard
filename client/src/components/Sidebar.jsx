@@ -16,7 +16,8 @@ import {
   SettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
-  HomeOutlined
+  HomeOutlined,
+  Analytics
   
 } from "@mui/icons-material";
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -47,7 +48,7 @@ const navItems = [
     icon: <RemoveRedEyeIcon />,
   },
   {
-    text: "Top Collectios",
+    text: "Top Collections",
     icon: <EqualizerIcon />,
   },
   {
@@ -107,6 +108,18 @@ const navItems = [
     icon: <InsightsIcon />,
   },
   {
+    text: "NFT",
+    icon: null,
+  },
+  {
+    text: "Overview NFT",
+    icon: <RemoveRedEyeIcon />,
+  },
+  {
+    text: "MetaData NFT",
+    icon: <Analytics />,
+  },
+  {
     text: "MARKETPLACE",
     icon: null,
   },
@@ -118,6 +131,7 @@ const navItems = [
     text: "Marketplace Volume",
     icon: <InsightsIcon />,
   },
+
   {
     text: "WALLET",
     icon: null,
@@ -233,7 +247,7 @@ const Sidebar = ({
             </List>
           </Box>
 
-          <Box position="absolute" bottom="2rem">
+          {/* <Box position="absolute" bottom="2rem">
             <Divider />
             <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
               <Box
@@ -263,11 +277,11 @@ const Sidebar = ({
               <SettingsOutlined
                 sx={{
                   color: theme.palette.secondary[300],
-                  fontSize: "25px ",
+                  fontSize: "25px",
                 }}
               />
             </FlexBetween>
-          </Box>
+          </Box> */}
         </Drawer>
       )}
     </Box>

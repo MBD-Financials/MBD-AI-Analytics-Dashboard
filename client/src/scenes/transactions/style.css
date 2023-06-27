@@ -1,0 +1,11 @@
+.transaction_container{
+    display: flex;
+    gap:1.5rem;
+}
+
+@media (max-width: 900px) {
+    /* CSS rules here will be applied only for screens with a width of 600 pixels or less */
+    .transaction_container{
+        flex-direction: column;
+    }
+  }

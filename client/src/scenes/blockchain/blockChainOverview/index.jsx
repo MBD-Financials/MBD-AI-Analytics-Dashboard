@@ -1,27 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { Box, Divider, List, ListItem, ListItemIcon, ListItemText, useMediaQuery } from "@mui/material";
+import { CartStatisticContainer, NewListItemText, OverViewNavigation } from "Styles/overview-dashboard";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
-import {
-	// DownloadOutlined,
-	// Email,
-	PointOfSale,
-	PersonAdd,
-	Traffic,
-} from "@mui/icons-material";
-import {
-	Box,
-	// Button,
-	// Typography,
-	useTheme,
-	useMediaQuery,
-} from "@mui/material";
-// import { DataGrid } from "@mui/x-data-grid";
-// import BreakdownChart from "components/BreakdownChart";
-import OverviewChart from "components/OverviewChart";
-// import { useGetDashboardQuery } from "state/api";
+import React, { useEffect, useState } from "react";
+import LinkIcon from '@mui/icons-material/Link';
+import { KeyboardArrowRight, LibraryAddCheck, LocalConvenienceStore, PersonAdd, PointOfSale, Traffic, Wallet } from "@mui/icons-material";
 import StatBox from "components/StatBox";
-import { useGlobalContext } from "../../Context/APIProvider";
-const Dashboard = () => {
+import { useTheme } from "@emotion/react";
+import { useGlobalContext } from "Context/APIProvider";
+function OverviewBlockChain() {
 	const theme = useTheme();
 	const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 	const { volumeOfNfts, totalCollections, totalWallets } = useGlobalContext();
@@ -111,31 +98,58 @@ const Dashboard = () => {
 	},[])
 
 
-	return (
-		<Box m="1.5rem 2.5rem">
-			<FlexBetween>
-				<Header
-					title="NFT DASHBOARD"
-					subtitle="Welcome to your NFT Dashboard"
-				/>
-
-				{/* <Box>
-					<Button
-						sx={{
-							backgroundColor: theme.palette.secondary.light,
-							color: theme.palette.background.alt,
-							fontSize: "14px",
-							fontWeight: "bold",
-							padding: "10px 20px",
-						}}
-					>
-						<DownloadOutlined sx={{ mr: "10px" }} />
-						Download Reports
-					</Button>
-				</Box> */}
-			</FlexBetween>
-
-			<Box
+  return (
+    <Box m="1.5rem 2.5rem">
+        <Header
+          title="Overveiw Blockchain"
+          subtitle="Welcome to your NFT Dashboard"
+        />
+        <Divider light/>
+        {/* <OverViewNavigation>
+            <List sx={{padding:'0',margin:'0',display:'flex'}}>
+                
+               <NewListItemText>
+                    <LinkIcon sx={{color:'black',marginRight:'0.5rem'}}/>Blockchain
+               </NewListItemText>
+               <NewListItemText>
+                    <LibraryAddCheck sx={{color:'black',marginRight:'0.5rem'}}/>Collection
+               </NewListItemText>
+               <NewListItemText>
+                    <LinkIcon sx={{color:'black',marginRight:'0.5rem'}}/>nft
+               </NewListItemText>
+               <NewListItemText>
+                    <LocalConvenienceStore sx={{color:'black',marginRight:'0.5rem'}}/>Marketplace
+               </NewListItemText>
+               <NewListItemText>
+                    <Wallet sx={{color:'black',marginRight:'0.5rem'}}/>wallet
+               </NewListItemText>
+               <NewListItemText>
+                    money laundering
+               </NewListItemText>
+            </List>
+        </OverViewNavigation>
+        <OverViewNavigation>
+            <List sx={{padding:'0',margin:'0',display:'flex'}}>
+                
+               <NewListItemText>
+                    <KeyboardArrowRight sx={{color:'black',marginRight:'0.5rem'}}/>Overveiw
+               </NewListItemText>
+               <NewListItemText>
+                    <KeyboardArrowRight sx={{color:'black',marginRight:'0.5rem'}}/>Top Collection
+               </NewListItemText>
+               <NewListItemText>
+                    <KeyboardArrowRight sx={{color:'black',marginRight:'0.5rem'}}/>nft
+               </NewListItemText>
+               <NewListItemText>
+                    <KeyboardArrowRight sx={{color:'black',marginRight:'0.5rem'}}/>Collection By created date
+               </NewListItemText>
+               <NewListItemText>
+                    <KeyboardArrowRight sx={{color:'black',marginRight:'0.5rem'}}/>hot Contract
+               </NewListItemText>
+            
+            </List>
+        </OverViewNavigation> */}
+        <Box
 				mt="20px"
 				display="grid"
 				gridTemplateColumns="repeat(12, 1fr)"
@@ -145,9 +159,7 @@ const Dashboard = () => {
 					"& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
 				}}
 			>
-				{/* ROW 1 */}
-
-				<StatBox
+<StatBox
 					title="Last Day Volume"
 					value={oneDayVolume}
 					increase={oneDayVolumeChange}
@@ -212,78 +224,10 @@ const Dashboard = () => {
 						/>
 					}
 				/>
+            
+            </Box>
+    </Box>
+  );
+}
 
-				<Box
-					gridColumn="span 12"
-					gridRow="span 3"
-					backgroundColor={theme.palette.background.alt}
-					p="1rem"
-					borderRadius="0.55rem"
-				>
-					<h2>One Month Volume (USD)</h2>
-					<OverviewChart view="sales" isDashboard={true} />
-				</Box>
-
-				{/* ROW 2 */}
-				{/* <Box
-          gridColumn="span 8"
-          gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
-        >
-          <DataGrid
-            loading={isLoading || !data}
-            getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
-            columns={columns}
-          />
-        </Box> */}
-				{/* <Box
-          gridColumn="span 4"
-          gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
-          </Typography>
-          <BreakdownChart isDashboard={true} />
-          <Typography
-            p="0 0.6rem"
-            fontSize="0.8rem"
-            sx={{ color: theme.palette.secondary[200] }}
-          >
-            Breakdown of real states and information via category for revenue
-            made for this year and total sales.
-          </Typography>
-        </Box> */}
-			</Box>
-		</Box>
-	);
-};
-
-export default Dashboard;
+export default OverviewBlockChain;
