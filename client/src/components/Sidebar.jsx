@@ -99,10 +99,10 @@ const navItems = [
     text: "Sale type volume",
     icon: <InsightsIcon />,
   },
-  {
-    text: "NFT",
-    icon: <ImageIcon />,
-  },
+  // {
+  //   text: "NFT",
+  //   icon: <ImageIcon />,
+  // },
   {
     text: "NFT Tracker (Volume)",
     icon: <InsightsIcon />,

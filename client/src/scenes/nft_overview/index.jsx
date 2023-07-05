@@ -14,16 +14,17 @@ import {
   // Typography,
   useTheme,
   useMediaQuery,
+  Typography,
 } from "@mui/material";
 // import { DataGrid } from "@mui/x-data-grid";
 // import BreakdownChart from "components/BreakdownChart";
 // import OverviewChart from "components/OverviewChart";
 // import { useGetDashboardQuery } from "state/api";
 import StatBox from "components/StatBox";
-import {
-  UseNFTGolbalContext,
-  UseNFTOverViewGolbalContext,
-} from "Context/NftOverviewProvider";
+import { UseNFTGolbalContext } from "Context/NFTProvider";
+import { DataGrid } from "@mui/x-data-grid";
+import { useGetCustomersQuery } from "state/api";
+import BarGraph from "components/BarGraph";
 
 function formatNumber(number) {
   if (number >= 1000000000) {
@@ -42,109 +43,157 @@ function formatNumber(number) {
     return number.toString(); // Return as it is if less than 1000
   }
 }
+function fromatDate(dateStr){
+  const dateObj = new Date(dateStr);
+
+// Step 2: Extract the year, month, and day from the Date object
+const year = dateObj.getFullYear();
+const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
+const day = String(dateObj.getDate()).padStart(2, '0');
+
+// Step 3: Create the formatted date string
+const formattedDate = `${year}-${month}-${day}`;
+return formattedDate
+}
 
 const NFT_OverView = () => {
   const theme = useTheme();
+  const { isLoading, data } = useGetCustomersQuery();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const {
     NftTotalVolume,
     NftWashTradeVolume,
     NftMoneyLaundered,
     NftNoOfSales,
-  } = UseNFTOverViewGolbalContext();
+    NftTransaction,
+    NftVolume,
+  } = UseNFTGolbalContext();
 
   const [allnftVolume, setAllnftVolume] = useState("");
-
-  const [oneDayVolume, setOneDayVolume] = useState("");
-  const [oneDayVolumeChange, setOneDayVolumeChange] = useState("");
-
-  const [sevenDayVolumeChange, setSevenDayVolumeChange] = useState("");
-  const [sevenDayVolume, setSevenDayVolume] = useState("");
-
-  const [thirtyDayVolumeChange, setThirtyDayVolumeChange] = useState("");
-  const [thirtyDayVolume, setThirtyDayVolume] = useState("");
-
-  const [allTimeVolumeChange, setAllTimeVolumeChange] = useState("");
-  const [allTimeVolumeNFTs, setAllTimeVolumeNFTs] = useState("");
-
-  const [allWallets, setAllWallets] = useState("");
+  const [washTradeVolume, setWashTradeVolume] = useState("");
+  const [moneyLaundered, setMoneyLaundered] = useState("");
+  const [totalSales, setTotalSales] = useState("");
+  const [transactions, setTransaction] = useState([]);
+  const [trackerVolume,setTrackerVolume] = useState([])
 
   const NFTVolume = async () => {
     await NftTotalVolume((response) => {
-      console.log("nft", response);
-      const volume = formatNumber();
-      //   const volumeChange =
-      //     Number(response?.metric_values.volume_change.value).toFixed(2) + "%";
+      // console.log('nft',response);
+
+      const volume = formatNumber(response.metric_ranges.volume.total);
       setAllnftVolume(volume);
-      //   setOneDayVolumeChange(volumeChange);
     }, "all");
   };
   const NFTWashTrade = async () => {
     await NftWashTradeVolume((response) => {
-      const volume =
-        (Number(response?.metric_values.volume.value) / 1.0e6).toFixed(2) +
-        " M";
-      const volumeChange =
-        Number(response?.metric_values.volume_change.value).toFixed(2) + "%";
-      setSevenDayVolume(volume);
-      setSevenDayVolumeChange(volumeChange);
+      // console.log('wash',response);
+      const volume = formatNumber(
+        response.metric_ranges.washtrade_volume.total
+      );
+
+      setWashTradeVolume(volume);
     }, "all");
   };
 
   const NFTTotalMoneyLaunched = async () => {
     await NftMoneyLaundered((response) => {
-      const volume =
-        (Number(response?.metric_values.volume.value) / 1.0e9).toFixed(2) +
-        " B";
-      const volumeChange =
-        Number(response?.metric_values.volume_change.value).toFixed(2) + "%";
-      setThirtyDayVolume(volume);
-      setThirtyDayVolumeChange(volumeChange);
+      // console.log('money_laundered',response);
+
+      const volume = formatNumber(
+        response.metric_ranges.washtrade_suspect_sales.total
+      );
+
+      setMoneyLaundered(volume);
     }, "all");
   };
   const NFTTotalNoOfSales = async () => {
     await NftNoOfSales((response) => {
-      const volume =
-        (Number(response?.metric_values.volume.value) / 1.0e9).toFixed(2) +
-        " B";
-      const volumeChange =
-        Number(response?.metric_values.volume_change.value).toFixed(2) + "%";
-      setAllTimeVolumeNFTs(volume);
-      setAllTimeVolumeChange(volumeChange);
+      // console.log('total no of sales',response);
+
+      const volume = formatNumber(response.metric_ranges.sales.total);
+      setTotalSales(volume);
+    }, "all");
+  };
+  const NFTTotalTransaction = async () => {
+    await NftTransaction((response) => {
+      // console.log('transaction',response);
+      setTransaction(response.transactions);
+    }, "all");
+  };
+  const NFTTrackerVolume = async () => {
+    await NftVolume((response) => {
+      // console.log('tracker volume',response);
+      setTrackerVolume(response.nfts);
     }, "all");
   };
 
+  const column = [
+    {
+      field: "seller",
+      headerName: "Seller",
+      flex: 1,
+    },
+    {
+      field: "buyer",
+      headerName: "Buyer",
+      flex: 1,
+    },
+    {
+      field: "timestamp",
+      headerName: "TimeStamp",
+      flex: 0.5,
+    },
+    {
+      field: "is_washtrade",
+      headerName: "is_Washtrade",
+      flex: 0.5,
+    },
+    {
+      field: "hash",
+      headerName: "Hash",
+      flex: 1,
+    },
+  ];
+  let rows = [];
+  transactions &&
+    transactions.forEach((col) => {
+      rows.push({
+        seller: col.sending_address,
+        buyer: col.receiving_address,
+        timestamp: fromatDate(col.transaction_date),
+        is_washtrade: col.is_washtrade ? "Washtrade":"Not Washtrade",
+        hash: col.hash,
+      });
+    });
   useEffect(() => {
     NFTVolume();
-    // NFTWashTrade();
-    // NFTTotalMoneyLaunched();
-    // NFTTotalNoOfSales();
+    NFTWashTrade();
+    NFTTotalMoneyLaunched();
+    NFTTotalNoOfSales();
+    NFTTotalTransaction();
+    NFTTrackerVolume()
   }, []);
 
+
+  const firstTenCollection = (collection) => {
+    console.log('collection',collection);
+    const graphCollection = collection.map((item) => {
+      return {
+        collection: item.metadata.minted_date,
+        volume: item.metric_values.volume.value,
+      };
+    });
+    return graphCollection;
+  };
+  const graphDate=firstTenCollection(trackerVolume);
   return (
     <Box m="1.5rem 2.5rem">
-      <FlexBetween>
-        <Header
-          title="NFT DASHBOARD"
-          subtitle="Welcome to your NFT NFT_OverView"
-        />
+      <Header
+        title="NFT DASHBOARD"
+        subtitle="Welcome to your NFT NFT_OverView"
+      />
 
-        {/* <Box>
-					<Button
-						sx={{
-							backgroundColor: theme.palette.secondary.light,
-							color: theme.palette.background.alt,
-							fontSize: "14px",
-							fontWeight: "bold",
-							padding: "10px 20px",
-						}}
-					>
-						<DownloadOutlined sx={{ mr: "10px" }} />
-						Download Reports
-					</Button>
-				</Box> */}
-      </FlexBetween>
-
+      {/* nft Statistics box start  */}
       <Box
         mt="20px"
         display="grid"
@@ -155,10 +204,8 @@ const NFT_OverView = () => {
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
-        {/* ROW 1 */}
-
         <StatBox
-          title="Total Volume"
+          title="Total NFT Volume"
           value={allnftVolume}
           icon={
             <Traffic
@@ -168,21 +215,8 @@ const NFT_OverView = () => {
         />
 
         <StatBox
-          title="7 Days Volume"
-          value={sevenDayVolume}
-          increase={sevenDayVolumeChange}
-          description="Since last month"
-          icon={
-            <PersonAdd
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
-        <StatBox
-          title="30 Days Volume"
-          value={thirtyDayVolume}
-          increase={thirtyDayVolumeChange}
-          description="Since last month"
+          title="Total Wash Trade Volume"
+          value={washTradeVolume}
           icon={
             <Traffic
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -190,10 +224,8 @@ const NFT_OverView = () => {
           }
         />
         <StatBox
-          title="Total Volume"
-          value={allTimeVolumeNFTs}
-          increase={allTimeVolumeChange}
-          description="Since last month"
+          title="Total Money Laundered"
+          value={moneyLaundered}
           icon={
             <Traffic
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -201,97 +233,60 @@ const NFT_OverView = () => {
           }
         />
         <StatBox
-          title="Total Collections"
-          //   value={totalCollectionCount}
-          increase=""
+          title="Total No Of Sales"
+          value={totalSales}
           icon={
             <Traffic
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
         />
-
-        <StatBox
-          title="Total Unique Wallets"
-          value={allWallets}
-          icon={
-            <Traffic
-              sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-            />
-          }
-        />
-
-        {/* <Box
-					gridColumn="span 12"
-					gridRow="span 3"
-					backgroundColor={theme.palette.background.alt}
-					p="1rem"
-					borderRadius="0.55rem"
-				>
-					<h2>One Month Volume (USD)</h2>
-					<OverviewChart view="sales" isDashboard={true} />
-				</Box> */}
-
-        {/* ROW 2 */}
-        {/* <Box
-          gridColumn="span 8"
-          gridRow="span 3"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-              borderRadius: "5rem",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.background.alt,
-            },
-            "& .MuiDataGrid-footerContainer": {
-              backgroundColor: theme.palette.background.alt,
-              color: theme.palette.secondary[100],
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.secondary[200]} !important`,
-            },
-          }}
-        >
-          <DataGrid
-            loading={isLoading || !data}
-            getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
-            columns={columns}
-          />
-        </Box> */}
-        {/* <Box
-          gridColumn="span 4"
-          gridRow="span 3"
-          backgroundColor={theme.palette.background.alt}
-          p="1.5rem"
-          borderRadius="0.55rem"
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            Sales By Category
-          </Typography>
-          <BreakdownChart isDashboard={true} />
-          <Typography
-            p="0 0.6rem"
-            fontSize="0.8rem"
-            sx={{ color: theme.palette.secondary[200] }}
-          >
-            Breakdown of real states and information via category for revenue
-            made for this year and total sales.
-          </Typography>
-        </Box> */}
       </Box>
+      {/* nft Statistics box end  */}
+        <BarGraph data={graphDate} heading={'NFT Tracker (Volume)'}/>
+      {/* nft transaction table box start  */}
+      <Box
+        mt="40px"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderTop: "none",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${theme.palette.secondary[200]} !important`,
+          },
+        }}
+      > 
+      <Typography variant="h3" mb={3}>NFT transaction details</Typography>
+        <DataGrid
+          loading={isLoading}
+          getRowId={(row) => row.buyer}
+          rows={rows || []}
+          // pageSize={10}
+          columns={column}
+        />
+      </Box>
+      {/* nft transaction table box end  */}
+
     </Box>
   );
 };
 
 export default NFT_OverView;
+

@@ -1,30 +1,15 @@
+import React from 'react'
 import { useTheme } from "@emotion/react";
 import { Box, Typography } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { BarChartContainer } from "Styles/BarChart/inde";
 import { useGetSalesQuery } from "state/api";
 
-const TrendVolumeBarChart = ({ heading, collection }) => {
-  const theme = useTheme();
-  const { isLoading } = useGetSalesQuery();
-
-  const firstTenCollection = () => {
-    // const firstTenDailyCollection = collection.slice(0, 10);
-    const copyOffirstTenDailyCollection = [...collection];
-    const graphCollection = copyOffirstTenDailyCollection.map((item) => {
-      return {
-        collection: item.date,
-        volume: item.values.volume/10**6,
-      };
-    });
-    return graphCollection;
-  };
-  const data = firstTenCollection();
-  // console.log("new", data);
-
+function BarGraph({heading, data}) {
+    const theme = useTheme();
+    const { isLoading } = useGetSalesQuery();
   return (
-    <>
-      <BarChartContainer
+    <BarChartContainer
         // backgroundColor={theme.palette.background.alt}
         // p="1rem 1rem 5rem 1rem"
         // borderRadius="0.55rem"
@@ -33,9 +18,9 @@ const TrendVolumeBarChart = ({ heading, collection }) => {
         // width= '100%'
         // border={`1px solid ${theme.palette.secondary[200]}`}
       >
-        <Typography variant="h2">{heading}</Typography>
+        <Typography variant="h2" mb={3}>{heading}</Typography>
         {/* {if (collection.length === 0 || isLoading) return "Loading...";} */}
-        {collection.length === 0 || isLoading ? (
+        {data.length === 0 || isLoading ? (
           <Typography variant="h6">Loading...</Typography>
         ) : (
           <ResponsiveBar
@@ -75,8 +60,7 @@ const TrendVolumeBarChart = ({ heading, collection }) => {
                 },
               },
             }}
-            
-            margin={{ top: 50, right: 130, bottom: 70, left: 60 }}
+            margin={{ top: 50, right: 130, bottom: 70, left: 100 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
             indexScale={{ type: "band", round: true }}
@@ -121,7 +105,7 @@ const TrendVolumeBarChart = ({ heading, collection }) => {
             axisBottom={{
               tickSize: 10,
               tickPadding: 5,
-              tickRotation: 15,
+              tickRotation: 35,
               // legend: 'country',
               legendPosition: "middle",
               legendOffset: 32,
@@ -144,15 +128,14 @@ const TrendVolumeBarChart = ({ heading, collection }) => {
             legends={[]}
             role="application"
             isFocusable={true}
-            ariaLabel=""
+            ariaLabel="Nivo bar chart demo"
             barAriaLabel={(e) =>
               e.id + ": " + e.formattedValue + " in country: " + e.indexValue
             }
           />
         )}
       </BarChartContainer>
-    </>
-  );
-};
+  )
+}
 
-export default TrendVolumeBarChart;
+export default BarGraph

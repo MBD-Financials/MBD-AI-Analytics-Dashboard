@@ -19,6 +19,7 @@ import Performance from "scenes/performance";
 import OverviewBlockChain from "scenes/blockchain/blockChainOverview";
 import Top_NFT from "scenes/top_nfts";
 import NFT_OverView from "scenes/nft_overview";
+import NFT_MetaData from "scenes/nft_metadata";
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -45,10 +46,10 @@ function App() {
               <Route path="/collection-event-pattern" element={<Performance />} />
               <Route path="/top-nft's" element={<Top_NFT />} />
               <Route path="/sale-type-volume" element={<Performance />} />
-              <Route path="/nft" element={<Performance />} />
+              {/* <Route path="/nft" element={<Performance />} /> */}
               <Route path="/nft-tracker-(volume)" element={<Performance />} />
               <Route path="/overview-nft" element={<NFT_OverView />} />
-              <Route path="/metadata-nft" element={<Performance />} />
+              <Route path="/metadata-nft" element={<NFT_MetaData />} />
 
               <Route path="/overview-marketplace" element={<Performance />} />
               <Route path="/marketplace-volume" element={<Performance />} />

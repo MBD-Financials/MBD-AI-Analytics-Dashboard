@@ -11,7 +11,7 @@ import { APIProvider } from "./Context/APIProvider";
 import { CollectionProvider } from "Context/CollectionProvider";
 import { VolumeTrendProvider } from "Context/VolumeTrendProvider";
 import { CollectionOverviewProvider } from "Context/CollectionOveriewProvider";
-import { NFTOverviewProvider } from "Context/NftOverviewProvider";
+import { NFTProvider } from "Context/NFTProvider";
 
 const store = configureStore({
   reducer: {
@@ -29,11 +29,11 @@ root.render(
       <CollectionProvider>
         <VolumeTrendProvider>
           <CollectionOverviewProvider>
-            <NFTOverviewProvider>
+            <NFTProvider>
               <Provider store={store}>
                 <App />
               </Provider>
-            </NFTOverviewProvider>
+            </NFTProvider>
           </CollectionOverviewProvider>
         </VolumeTrendProvider>
       </CollectionProvider>

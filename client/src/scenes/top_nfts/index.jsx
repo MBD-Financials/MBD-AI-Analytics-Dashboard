@@ -140,6 +140,7 @@ function Top_NFT() {
     //   flex: 0.5,
     // },
   ];
+  
   let row2 = [];
   nftCollectionByVolume &&
     nftCollectionByVolume.forEach((col) => {

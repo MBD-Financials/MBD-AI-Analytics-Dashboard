@@ -35,7 +35,7 @@ const OverviewChart = ({ isDashboard = false, view }) => {
       ]
     });
     
-	console.log([monthDataChart]);
+	// console.log([monthDataChart]);
     return [[monthDataChart]]
 
 

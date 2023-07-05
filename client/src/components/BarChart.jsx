@@ -12,7 +12,6 @@ const NewBarChart = ({ heading, collection }) => {
     const firstTenDailyCollection = collection.slice(0, 10);
     const copyOffirstTenDailyCollection = [...firstTenDailyCollection];
     const graphCollection = copyOffirstTenDailyCollection.map((item) => {
-      console.log(item);
       return {
         collection: item.metadata.name,
         volume: item.metric_values.volume.value,
